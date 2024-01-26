@@ -24,6 +24,8 @@ func NewServer() (*Server, error) {
 func (s *Server) setupRouter() {
 	app := fiber.New()
 
+	app.Static("/assets", "./assets")
+
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
