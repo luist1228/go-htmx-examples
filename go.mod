@@ -3,8 +3,12 @@ module github.com/luist1228/go-htmx-examples
 go 1.21.6
 
 require (
+	github.com/a-h/templ v0.2.543
+	github.com/gofiber/fiber/v3 v3.0.0-20240124121856-755f133ac161
+)
+
+require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/gofiber/fiber/v3 v3.0.0-20240124121856-755f133ac161 // indirect
 	github.com/gofiber/utils/v2 v2.0.0-beta.3 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
