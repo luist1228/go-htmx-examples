@@ -27,6 +27,7 @@ func (s *Server) setupRouter() {
 	app.Static("/assets", "./assets")
 
 	app.Use(logger.New())
+	
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
@@ -36,7 +37,7 @@ func (s *Server) setupRouter() {
 	api := app.Group("/api")
 
 	app.Get("/", func(c fiber.Ctx) error {
-		return Render(c, layouts.Page("Home", views.Home()))
+		return Render(c, layouts.Main("Home", views.Home()))
 	})
 
 	api.Get("/", func(c fiber.Ctx) error {
@@ -53,5 +54,5 @@ func (s *Server) Start(addr string) error {
 }
 
 func NotFoundMiddleware(c fiber.Ctx) error {
-	return Render(c, layouts.Page("Not Found", views.NotFound()), templ.WithStatus(http.StatusNotFound))
+	return Render(c, layouts.Main("Not Found", views.NotFound()), templ.WithStatus(http.StatusNotFound))
 }

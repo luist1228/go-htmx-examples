@@ -1,0 +1,10 @@
+package layouts
+
+templ App(content templ.Component) {
+	<div class="grid grid-cols-12 grid-flow-col justify-center items-center">
+		if content != nil {
+			@content
+		}
+		{ children... }
+	</div>
+}
