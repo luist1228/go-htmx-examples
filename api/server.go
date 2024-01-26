@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/luist1228/go-htmx-examples/db"
 	"github.com/luist1228/go-htmx-examples/views"
 	"github.com/luist1228/go-htmx-examples/views/layouts"
 )
@@ -26,8 +27,10 @@ func (s *Server) setupRouter() {
 
 	app.Static("/assets", "./assets")
 
+	db.FillTodos()
+
 	app.Use(logger.New())
-	
+
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",

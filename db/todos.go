@@ -1,6 +1,8 @@
 package db
 
 import (
+	"embed"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -13,8 +15,8 @@ func NewTodos() *Todos {
 	return &Todos{}
 }
 
-func (l *Todos) Add(description string) *Todo {
-	todo := NewTodo(description)
+func (l *Todos) Add(description string, completed bool) *Todo {
+	todo := NewTodo(description, completed)
 	*l = append(*l, todo)
 	return todo
 }
@@ -81,4 +83,31 @@ func (l *Todos) indexOf(id uuid.UUID) int {
 		}
 	}
 	return -1
+}
+
+var List = &Todos{}
+
+type JSONTodo struct {
+	Description string `json:"description"`
+	Completed   bool   `json:"completed"`
+	ID          int    `json:"id"`
+}
+type JSONTodos struct {
+	Todos []*JSONTodo `json:"todos"`
+}
+
+//go:embed todos.json
+var f embed.FS
+
+// Fill the todo List with json data
+func FillTodos() {
+	file, _ := f.ReadFile("todos.json")
+	data := &JSONTodos{}
+
+	json.Unmarshal([]byte(file), &data)
+
+	for _, todo := range data.Todos {
+		List.Add(todo.Description, todo.Completed)
+	}
+
 }

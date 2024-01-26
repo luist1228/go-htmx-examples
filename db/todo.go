@@ -11,13 +11,12 @@ type Todo struct {
 	Completed   bool      `json:"completed"`
 	ID          uuid.UUID `json:"id"`
 	CreatedAt   time.Time `json:"createdAt"`
-	UserId      string    `json:"userId"`
 }
 
-func NewTodo(description string) *Todo {
+func NewTodo(description string, completed bool) *Todo {
 	return &Todo{
 		ID:          uuid.New(),
-		Completed:   false,
+		Completed:   completed,
 		Description: description,
 		CreatedAt:   time.Now(),
 	}
