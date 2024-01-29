@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Todos []*Todo
+type Todos []*Todo 
 
 func NewTodos() *Todos {
 	return &Todos{}
@@ -85,8 +85,6 @@ func (l *Todos) indexOf(id uuid.UUID) int {
 	return -1
 }
 
-var List = &Todos{}
-
 type JSONTodo struct {
 	Description string `json:"description"`
 	Completed   bool   `json:"completed"`
@@ -100,14 +98,15 @@ type JSONTodos struct {
 var f embed.FS
 
 // Fill the todo List with json data
-func FillTodos() {
+func FillTodos() *Todos {
 	file, _ := f.ReadFile("todos.json")
 	data := &JSONTodos{}
-
 	json.Unmarshal([]byte(file), &data)
 
+	todos := NewTodos()
 	for _, todo := range data.Todos {
-		List.Add(todo.Description, todo.Completed)
+		todos.Add(todo.Description, todo.Completed)
 	}
 
+	return todos
 }

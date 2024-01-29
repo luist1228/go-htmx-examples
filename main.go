@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
 	server, err := api.NewServer()
 	if err != nil {
 		log.Fatal("cannot create server:", err)

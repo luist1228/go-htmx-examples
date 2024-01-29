@@ -740,34 +740,6 @@ html {
   --tw-backdrop-sepia:  ;
 }
 
-.hero {
-  display: grid;
-  width: 100%;
-  place-items: center;
-  background-size: cover;
-  background-position: center;
-}
-
-.hero > * {
-  grid-column-start: 1;
-  grid-row-start: 1;
-}
-
-.hero-content {
-  z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 80rem;
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.link {
-  cursor: pointer;
-  text-decoration-line: underline;
-}
-
 @keyframes button-pop {
   0% {
     transform: scale(var(--btn-focus-scale, 0.98));
@@ -794,16 +766,6 @@ html {
   100% {
     background-position-y: 0;
   }
-}
-
-.link:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-.link:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
 }
 
 @keyframes modal-pop {
@@ -868,98 +830,5 @@ html {
   100% {
     transform: scale(1);
     opacity: 1;
-  }
-}
-
-.flex {
-  display: flex;
-}
-
-.grid {
-  display: grid;
-}
-
-.h-4\/5 {
-  height: 80%;
-}
-
-.h-full {
-  height: 100%;
-}
-
-.min-h-screen {
-  min-height: 100vh;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.max-w-md {
-  max-width: 28rem;
-}
-
-.grid-flow-col {
-  grid-auto-flow: column;
-}
-
-.grid-cols-12 {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.bg-base-200 {
-  --tw-bg-opacity: 1;
-  background-color: var(--fallback-b2,oklch(var(--b2)/var(--tw-bg-opacity)));
-}
-
-.bg-base-300 {
-  --tw-bg-opacity: 1;
-  background-color: var(--fallback-b3,oklch(var(--b3)/var(--tw-bg-opacity)));
-}
-
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.text-error {
-  --tw-text-opacity: 1;
-  color: var(--fallback-er,oklch(var(--er)/var(--tw-text-opacity)));
-}
-
-@media (min-width: 768px) {
-  .md\:w-3\/4 {
-    width: 75%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .lg\:w-1\/2 {
-    width: 50%;
   }
 }
