@@ -1,15 +1,34 @@
 package layouts
 
+import "github.com/luist1228/go-htmx-examples/templates/components"
+
 templ Main(title string, content templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<title>{ title }</title>
+			<script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
+			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 			<link rel="stylesheet" href="/assets/css/tailwind.css"/>
+			<link
+				rel="stylesheet"
+				href="https://cdn.xeiaso.net/static/pkg/iosevka/family.css"
+			/>
 		</head>
 		<body>
 			<main class=" flex flex-col items-center h-full min-h-screen bg-base-300">
+				<div class="navbar bg-base-200">
+					<div class="navbar-start">
+						<a href="/" class="btn bg-base-100 text-xl">
+							<span class="text-primary">GO + &lt;<b>/</b>&gt; htm<b>x</b></span>
+						</a>
+					</div>
+					<div class="navbar-center"></div>
+					<div class="navbar-end">
+						@components.ThemeDropdown()
+					</div>
+				</div>
 				<section class=" w-full px-4 md:w-3/4 lg:w-1/2">
 					if content!= nil {
 						@content

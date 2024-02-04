@@ -9,22 +9,24 @@ import (
 	"github.com/luist1228/go-htmx-examples/templates/views/layouts"
 )
 
-func (h *Handler) Register(app *fiber.App){
+func (h *Handler) Register(app *fiber.App) {
 	api := app.Group("/api")
 
 	app.Get("/", func(c fiber.Ctx) error {
-		return Render(c, layouts.Main("Home", views.Home()))
+		return Render(c, FullPageRender("Home", views.Home()))
 	})
 
 	api.Get("/", func(c fiber.Ctx) error {
 		return c.SendString("Hello from Api")
 	})
 
-	api.Get("/todos", h.Todos)
-
 	app.Use(NotFoundMiddleware)
 }
 
 func NotFoundMiddleware(c fiber.Ctx) error {
 	return Render(c, layouts.Main("Not Found", views.NotFound()), templ.WithStatus(http.StatusNotFound))
+}
+
+func FullPageRender(title string, content templ.Component) templ.Component {
+	return layouts.Main(title, layouts.App(content))
 }

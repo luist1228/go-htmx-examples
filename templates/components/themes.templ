@@ -1,0 +1,148 @@
+package components
+
+import "github.com/luist1228/go-htmx-examples/util"
+
+script ThemeChange() {
+
+	const currentTheme=window.localStorage.getItem("theme")
+	console.log(currentTheme)
+	const currentCheckSVG= document.getElementById("svg-"+currentTheme)
+
+	currentCheckSVG.classList.remove('invisible')
+	currentCheckSVG.classList.add('visible')
+
+	const origSetItem = window.localStorage.setItem;
+
+	window.localStorage.setItem = function setItem(key, value) {
+		// Retrieve old value before we store the new one
+		let oldValue = window.localStorage.getItem(key);
+		// Store in LocalStorage
+		const result = origSetItem.apply(this, arguments);
+
+		// Manually fire a "storage" event so this window is alerted. On its own, 
+		// localStorage.setItem() only fires a "storage" event for other tabs.
+		const e = new StorageEvent('storage', {
+			storageArea: window.localStorage,
+			key,
+			oldValue,
+			newValue: value,
+			url: window.location.href,
+		});
+		window.dispatchEvent(e);
+
+		return result;
+	}
+
+	window.addEventListener("storage", (e)=>{
+		if(e.key==="theme"){
+			const oldTheme= e.oldValue
+			const newTheme= e.newValue
+			const oldCheckSVG= document.getElementById("svg-"+oldTheme)
+			const newCheckSVG= document.getElementById("svg-"+newTheme)
+
+			oldCheckSVG.classList.remove('visible')
+			oldCheckSVG.classList.add('invisible')
+
+			newCheckSVG.classList.remove('invisible')
+			newCheckSVG.classList.add('visible')
+		}
+	}, false)
+
+
+}
+
+templ ThemeDropdown() {
+	<div
+		title="Change Theme"
+		class="dropdown dropdown-end"
+	>
+		<div
+			tabindex="0"
+			class="btn normal-case btn-ghost"
+		>
+			<svg
+				width="20"
+				height="20"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				class="h-5 w-5 stroke-current "
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+				></path>
+			</svg>
+			<span class="hidden font-normal md:inline">{ "Theme" }</span>
+			<svg
+				width="12px"
+				height="12px"
+				class="hidden h-2 w-2 fill-current opacity-60 sm:inline-block"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 2048 2048"
+			>
+				<path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+			</svg>
+		</div>
+		<div
+			class="
+      dropdown-content 
+      bg-base-200 
+      text-base-content 
+      rounded-box 
+      h-[40vh] 
+      max-h-96 
+      w-56 
+      overflow-y-auto 
+      shadow 
+      "
+		>
+			<div
+				class="grid grid-cols-1 gap-3 p-3"
+				tabindex="0"
+				id="theme-list"
+			>
+				for _, theme:= range util.Themes {
+					<button
+						data-set-theme={ theme.Value }
+						data-key="theme"
+						class="outline-base-content overflow-hidden rounded-lg text-left "
+					>
+						<div
+							data-theme={ theme.Value }
+							class="bg-base-100 text-base-content w-full cursor-pointer font-sans"
+						>
+							<div class="grid grid-cols-5 grid-rows-3">
+								<div class="col-span-5 row-span-3 row-start-1 flex items-center gap-2 px-4 py-3">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="currentColor "
+										class="invisible"
+										id={ "svg-" + theme.Name }
+									>
+										<path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+									</svg>
+									<div class="flex-grow text-sm">{ theme.Name }</div>
+									<div
+										class="flex h-full flex-shrink-0 flex-wrap gap-1"
+									>
+										<div class="visible bg-primary w-2 rounded"></div>
+										<div class="bg-secondary w-2 rounded"></div>
+										<div class="bg-accent w-2 rounded"></div>
+										<div class="bg-neutral w-2 rounded"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</button>
+				}
+			</div>
+		</div>
+	</div>
+	@ThemeChange()
+}
