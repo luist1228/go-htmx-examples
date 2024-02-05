@@ -3,14 +3,15 @@ package components
 import "github.com/luist1228/go-htmx-examples/util"
 
 script ThemeChange() {
-
+	// Check initial theme and set check svg visible
 	const currentTheme=window.localStorage.getItem("theme")
-	console.log(currentTheme)
-	const currentCheckSVG= document.getElementById("svg-"+currentTheme)
+	if(currentTheme){
+		const currentCheckSVG= document.getElementById("svg-"+currentTheme)
+		currentCheckSVG.classList.remove('invisible')
+		currentCheckSVG.classList.add('visible')
+	}
 
-	currentCheckSVG.classList.remove('invisible')
-	currentCheckSVG.classList.add('visible')
-
+	// Change localStorage function so that it emits change event within the same page
 	const origSetItem = window.localStorage.setItem;
 
 	window.localStorage.setItem = function setItem(key, value) {
@@ -47,8 +48,6 @@ script ThemeChange() {
 			newCheckSVG.classList.add('visible')
 		}
 	}, false)
-
-
 }
 
 templ ThemeDropdown() {

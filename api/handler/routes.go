@@ -16,6 +16,10 @@ func (h *Handler) Register(app *fiber.App) {
 		return Render(c, FullPageRender("Home", views.Home()))
 	})
 
+	app.Get("/test", func(c fiber.Ctx) error {
+		return Render(c, views.Home())
+	})
+
 	api.Get("/", func(c fiber.Ctx) error {
 		return c.SendString("Hello from Api")
 	})

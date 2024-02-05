@@ -1,7 +1,11 @@
 package views
 
+import "fmt"
+import "github.com/luist1228/go-htmx-examples/util"
+
 templ Home() {
-	<div class="bg-red">
+	<div class="bg-red" hx-get="/test" hx-swap="outerHtml">
+		Is rendered from htmx req:{ fmt.Sprintf("%v",util.TemplIsHtmx(ctx)) }
 		<p>Home Page </p>
 	</div>
 }

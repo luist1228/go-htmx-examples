@@ -14,14 +14,16 @@ import "github.com/luist1228/go-htmx-examples/util"
 
 func ThemeChange() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ThemeChange_f4dd`,
-		Function: `function __templ_ThemeChange_f4dd(){const currentTheme=window.localStorage.getItem("theme")
-	console.log(currentTheme)
-	const currentCheckSVG= document.getElementById("svg-"+currentTheme)
+		Name: `__templ_ThemeChange_6475`,
+		Function: `function __templ_ThemeChange_6475(){// Check initial theme and set check svg visible
+	const currentTheme=window.localStorage.getItem("theme")
+	if(currentTheme){
+		const currentCheckSVG= document.getElementById("svg-"+currentTheme)
+		currentCheckSVG.classList.remove('invisible')
+		currentCheckSVG.classList.add('visible')
+	}
 
-	currentCheckSVG.classList.remove('invisible')
-	currentCheckSVG.classList.add('visible')
-
+	// Change localStorage function so that it emits change event within the same page
 	const origSetItem = window.localStorage.setItem;
 
 	window.localStorage.setItem = function setItem(key, value) {
@@ -58,11 +60,9 @@ func ThemeChange() templ.ComponentScript {
 			newCheckSVG.classList.add('visible')
 		}
 	}, false)
-
-
 }`,
-		Call:       templ.SafeScript(`__templ_ThemeChange_f4dd`),
-		CallInline: templ.SafeScriptInline(`__templ_ThemeChange_f4dd`),
+		Call:       templ.SafeScript(`__templ_ThemeChange_6475`),
+		CallInline: templ.SafeScriptInline(`__templ_ThemeChange_6475`),
 	}
 }
 
@@ -86,7 +86,7 @@ func ThemeDropdown() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("Theme")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 77, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 76, Col: 55}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -128,7 +128,7 @@ func ThemeDropdown() templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(theme.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 129, Col: 52}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 128, Col: 52}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

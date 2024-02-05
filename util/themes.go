@@ -1,5 +1,7 @@
 package util
 
+import "context"
+
 type Theme struct {
 	Name  string
 	Value string
@@ -134,4 +136,9 @@ var Themes []Theme = []Theme{
 		Name:  "sunset",
 		Value: "sunset",
 	},
+}
+
+
+func TemplIsHtmx(ctx context.Context) bool {
+	return ctx.Value("isHtmx").(bool)
 }

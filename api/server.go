@@ -7,6 +7,10 @@ import (
 	"github.com/luist1228/go-htmx-examples/api/handler"
 )
 
+const (
+	htmxHeaderKey = "HX-Request"
+)
+
 type Server struct {
 	app     *fiber.App
 	handler handler.Handler
@@ -36,6 +40,13 @@ func (s *Server) setupRouter() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
+
+	// Check if request has HTMX headers and add it to the context
+	s.app.Use(func(c fiber.Ctx) error {
+		htmxHeader := c.Get(htmxHeaderKey)
+		c.Context().SetUserValue("isHtmx", htmxHeader == "true")
+		return c.Next()
+	})
 
 	s.handler.Register(s.app)
 }

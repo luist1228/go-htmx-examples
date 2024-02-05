@@ -2,6 +2,7 @@ package layouts
 
 import "github.com/luist1228/go-htmx-examples/templates/components"
 
+
 templ Main(title string, content templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -24,7 +25,9 @@ templ Main(title string, content templ.Component) {
 							<span class="text-primary">GO + &lt;<b>/</b>&gt; htm<b>x</b></span>
 						</a>
 					</div>
-					<div class="navbar-center"></div>
+					<div class="navbar-center">
+						
+					</div>
 					<div class="navbar-end">
 						@components.ThemeDropdown()
 					</div>
