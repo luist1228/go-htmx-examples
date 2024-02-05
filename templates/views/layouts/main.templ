@@ -2,7 +2,6 @@ package layouts
 
 import "github.com/luist1228/go-htmx-examples/templates/components"
 
-
 templ Main(title string, content templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -16,6 +15,30 @@ templ Main(title string, content templ.Component) {
 				rel="stylesheet"
 				href="https://cdn.xeiaso.net/static/pkg/iosevka/family.css"
 			/>
+			<script>
+				// Change localStorage setItem function so that it emits change event within the same page
+				const origSetItem = window.localStorage.setItem;
+
+				window.localStorage.setItem = function setItem(key, value) {
+					// Retrieve old value before we store the new one
+					let oldValue = window.localStorage.getItem(key);
+					// Store in LocalStorage
+					const result = origSetItem.apply(this, arguments);
+
+					// Manually fire a "storage" event so this window is alerted. On its own, 
+					// localStorage.setItem() only fires a "storage" event for other tabs.
+					const e = new StorageEvent('storage', {
+						storageArea: window.localStorage,
+						key,
+						oldValue,
+						newValue: value,
+						url: window.location.href,
+					});
+					window.dispatchEvent(e);
+
+					return result;
+				}
+			</script>
 		</head>
 		<body>
 			<main class=" flex flex-col items-center h-full min-h-screen bg-base-300">
@@ -25,9 +48,7 @@ templ Main(title string, content templ.Component) {
 							<span class="text-primary">GO + &lt;<b>/</b>&gt; htm<b>x</b></span>
 						</a>
 					</div>
-					<div class="navbar-center">
-						
-					</div>
+					<div class="navbar-center"></div>
 					<div class="navbar-end">
 						@components.ThemeDropdown()
 					</div>

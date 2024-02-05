@@ -14,55 +14,34 @@ import "github.com/luist1228/go-htmx-examples/util"
 
 func ThemeChange() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ThemeChange_6475`,
-		Function: `function __templ_ThemeChange_6475(){// Check initial theme and set check svg visible
+		Name: `__templ_ThemeChange_24c4`,
+		Function: `function __templ_ThemeChange_24c4(){// Check initial theme and set check svg visible
 	const currentTheme=window.localStorage.getItem("theme")
 	if(currentTheme){
 		const currentCheckSVG= document.getElementById("svg-"+currentTheme)
 		currentCheckSVG.classList.remove('invisible')
 		currentCheckSVG.classList.add('visible')
 	}
-
-	// Change localStorage function so that it emits change event within the same page
-	const origSetItem = window.localStorage.setItem;
-
-	window.localStorage.setItem = function setItem(key, value) {
-		// Retrieve old value before we store the new one
-		let oldValue = window.localStorage.getItem(key);
-		// Store in LocalStorage
-		const result = origSetItem.apply(this, arguments);
-
-		// Manually fire a "storage" event so this window is alerted. On its own, 
-		// localStorage.setItem() only fires a "storage" event for other tabs.
-		const e = new StorageEvent('storage', {
-			storageArea: window.localStorage,
-			key,
-			oldValue,
-			newValue: value,
-			url: window.location.href,
-		});
-		window.dispatchEvent(e);
-
-		return result;
-	}
-
+	// When theme changes highlight wich theme is selected
 	window.addEventListener("storage", (e)=>{
 		if(e.key==="theme"){
+			// Get old and new values
 			const oldTheme= e.oldValue
 			const newTheme= e.newValue
+			// Get check corresponding svg element
 			const oldCheckSVG= document.getElementById("svg-"+oldTheme)
 			const newCheckSVG= document.getElementById("svg-"+newTheme)
 
+			// Toggle visibility
 			oldCheckSVG.classList.remove('visible')
 			oldCheckSVG.classList.add('invisible')
-
 			newCheckSVG.classList.remove('invisible')
 			newCheckSVG.classList.add('visible')
 		}
 	}, false)
 }`,
-		Call:       templ.SafeScript(`__templ_ThemeChange_6475`),
-		CallInline: templ.SafeScriptInline(`__templ_ThemeChange_6475`),
+		Call:       templ.SafeScript(`__templ_ThemeChange_24c4`),
+		CallInline: templ.SafeScriptInline(`__templ_ThemeChange_24c4`),
 	}
 }
 
@@ -86,7 +65,7 @@ func ThemeDropdown() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("Theme")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 76, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 55, Col: 55}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -128,7 +107,7 @@ func ThemeDropdown() templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(theme.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 128, Col: 52}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/themes.templ`, Line: 107, Col: 52}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

@@ -10,40 +10,19 @@ script ThemeChange() {
 		currentCheckSVG.classList.remove('invisible')
 		currentCheckSVG.classList.add('visible')
 	}
-
-	// Change localStorage function so that it emits change event within the same page
-	const origSetItem = window.localStorage.setItem;
-
-	window.localStorage.setItem = function setItem(key, value) {
-		// Retrieve old value before we store the new one
-		let oldValue = window.localStorage.getItem(key);
-		// Store in LocalStorage
-		const result = origSetItem.apply(this, arguments);
-
-		// Manually fire a "storage" event so this window is alerted. On its own, 
-		// localStorage.setItem() only fires a "storage" event for other tabs.
-		const e = new StorageEvent('storage', {
-			storageArea: window.localStorage,
-			key,
-			oldValue,
-			newValue: value,
-			url: window.location.href,
-		});
-		window.dispatchEvent(e);
-
-		return result;
-	}
-
+	// When theme changes highlight wich theme is selected
 	window.addEventListener("storage", (e)=>{
 		if(e.key==="theme"){
+			// Get old and new values
 			const oldTheme= e.oldValue
 			const newTheme= e.newValue
+			// Get check corresponding svg element
 			const oldCheckSVG= document.getElementById("svg-"+oldTheme)
 			const newCheckSVG= document.getElementById("svg-"+newTheme)
 
+			// Toggle visibility
 			oldCheckSVG.classList.remove('visible')
 			oldCheckSVG.classList.add('invisible')
-
 			newCheckSVG.classList.remove('invisible')
 			newCheckSVG.classList.add('visible')
 		}
