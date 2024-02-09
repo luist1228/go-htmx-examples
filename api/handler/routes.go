@@ -13,12 +13,10 @@ func (h *Handler) Register(app *fiber.App) {
 	api := app.Group("/api")
 
 	app.Get("/", func(c fiber.Ctx) error {
-		return Render(c, FullPageRender("Home", views.Home()))
+		return c.Redirect().To("/todos")
 	})
 
-	app.Get("/test", func(c fiber.Ctx) error {
-		return Render(c, views.Home())
-	})
+	h.RegisterTodosRequests(app, api)
 
 	api.Get("/", func(c fiber.Ctx) error {
 		return c.SendString("Hello from Api")

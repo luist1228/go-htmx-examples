@@ -54,3 +54,6 @@ func (s *Server) setupRouter() {
 func (s *Server) Start(addr string) error {
 	return s.app.Listen(addr)
 }
+
+
+

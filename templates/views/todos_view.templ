@@ -1,0 +1,8 @@
+package views
+
+import "github.com/luist1228/go-htmx-examples/templates/components"
+import "github.com/luist1228/go-htmx-examples/db"
+
+templ TodosView(todos db.Todos) {
+	@components.Todos(todos)
+}

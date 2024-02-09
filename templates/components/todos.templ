@@ -1,0 +1,11 @@
+package components
+
+import "github.com/luist1228/go-htmx-examples/db"
+
+templ Todos(todos db.Todos) {
+	<div class="space-y-2 my-2" id="todos">
+		for _, todo:= range todos.All() {
+			@Todo(*todo)
+		}
+	</div>
+}
