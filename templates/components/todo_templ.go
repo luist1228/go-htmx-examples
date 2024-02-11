@@ -46,7 +46,24 @@ func Todo(todo db.Todo) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></form><form class=\"col-span-1 sm:col-start-auto  col-start-11\" action=\"\"><button class=\"btn btn-block btn-accent h-full \">🖊</button></form><form class=\"col-span-1 sm:col-start-auto col-start-12 \" action=\"\"><button class=\"btn btn-error btn-block  h-full \">🗑</button></form><button class=\"btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1\">≡</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></form><form class=\"col-span-1 sm:col-start-auto  col-start-11\" action=\"\"><button class=\"btn btn-block btn-accent h-full \">🖊</button></form><form method=\"POST\" action=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 templ.SafeURL = templ.URL("todos/delete/" + todo.ID.String())
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var3)))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#todos\" hx-swap=\"outerHTML\" hx-delete=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("/todos/" + todo.ID.String()))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"col-span-1 sm:col-start-auto col-start-12 \"><button type=\"submit\" class=\"btn btn-error btn-block  h-full \">🗑</button></form><button class=\"btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1\">≡</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

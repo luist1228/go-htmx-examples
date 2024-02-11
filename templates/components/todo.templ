@@ -19,8 +19,16 @@ templ Todo(todo db.Todo) {
 				🖊
 			</button>
 		</form>
-		<form class="col-span-1 sm:col-start-auto col-start-12 " action="">
+		<form
+			method="POST"
+			action={ templ.URL("todos/delete/" + todo.ID.String()) }
+			hx-target="#todos"
+			hx-swap="outerHTML"
+			hx-delete={ "/todos/" + todo.ID.String() }
+			class="col-span-1 sm:col-start-auto col-start-12 "
+		>
 			<button
+				type="submit"
 				class="btn btn-error btn-block  h-full "
 			>
 				🗑

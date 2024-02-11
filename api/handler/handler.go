@@ -3,6 +3,7 @@ package handler
 import (
 	"strings"
 
+	"github.com/a-h/templ"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v3"
 	"github.com/luist1228/go-htmx-examples/db"
@@ -33,4 +34,21 @@ func isHtmx(c fiber.Ctx) bool {
 
 func isApiRequest(c fiber.Ctx) bool {
 	return strings.Contains(c.Path(), "/api")
+}
+
+func (h Handler) caseResponse(
+	c fiber.Ctx,
+	htmxContent templ.Component,
+	apiData any,
+	fullPage templ.Component,
+) error {
+	if isApiRequest(c) {
+		return c.JSON(apiData)
+	}
+
+	if isHtmx(c) {
+		return Render(c, htmxContent)
+	}
+
+	return Render(c, fullPage)
 }
