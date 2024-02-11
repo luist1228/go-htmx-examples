@@ -1,0 +1,27 @@
+
+package components
+
+templ SearchTodo() {
+	<form
+		method="GET"
+		action="/todos/search"
+		class="flex-1 flex flex-row min-w-0 items-center gap-2"
+	>
+		<span>Search</span>
+		<input
+			hx-get="/todos/search"
+			hx-trigger="keyup changed delay:500ms, search"
+			hx-target="#sort-form"
+			type="text"
+			name="search"
+			class="input input-bordered min-w-0  flex-1 "
+			placeholder="Search Todo"
+		/>
+		// <button
+		// 	type="submit"
+		// 	class="btn btn-secondary  "
+		// >
+		// 	Search
+		// </button>
+	</form>
+}

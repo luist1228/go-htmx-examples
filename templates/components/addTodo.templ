@@ -1,0 +1,26 @@
+package components
+
+templ AddTodo() {
+	<form
+		method="POST"
+		action="/todos"
+		hx-post="/todos"
+		hx-target="#todos"
+		hx-swap="beforeend"
+		class="flex-1 flex flex-row min-w-0 mt-2"
+		hx-on::after-request="this.reset()"
+	>
+		<input
+			type="text"
+			placeholder="Add new todo "
+			class="input input-bordered min-w-0 flex-1 "
+			name="description"
+		/>
+		<button
+			type="submit"
+			class="btn btn-primary  "
+		>
+			Add
+		</button>
+	</form>
+}

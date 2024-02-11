@@ -1,6 +1,9 @@
 package api
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/logger"
@@ -16,9 +19,24 @@ type Server struct {
 	handler handler.Handler
 }
 
+type GlobalErrorHandlerResp struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
 func NewServer() (*Server, error) {
 	handler := handler.NewHandler()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: func(c fiber.Ctx, err error) error {
+			code := http.StatusInternalServerError
+			var e *fiber.Error
+			if errors.As(err, &e) {
+				code = e.Code
+			}
+			c.Set("Content-Type", "text/plain")
+			return c.Status(code).SendString(err.Error())
+		},
+	})
 
 	server := &Server{
 		handler: *handler,
@@ -54,6 +72,3 @@ func (s *Server) setupRouter() {
 func (s *Server) Start(addr string) error {
 	return s.app.Listen(addr)
 }
-
-
-
