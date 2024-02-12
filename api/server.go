@@ -4,10 +4,12 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/logger"
-	"github.com/luist1228/go-htmx-examples/api/handler"
+	"github.com/luist1228/go-htmx-examples/api/handlers"
+	"github.com/luist1228/go-htmx-examples/api/handlers/todos"
 )
 
 const (
@@ -15,8 +17,8 @@ const (
 )
 
 type Server struct {
-	app     *fiber.App
-	handler handler.Handler
+	app         *fiber.App
+	todoHandler todos.Handler
 }
 
 type GlobalErrorHandlerResp struct {
@@ -24,8 +26,9 @@ type GlobalErrorHandlerResp struct {
 	Message string `json:"message"`
 }
 
+var validate = validator.New()
+
 func NewServer() (*Server, error) {
-	handler := handler.NewHandler()
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(c fiber.Ctx, err error) error {
 			code := http.StatusInternalServerError
@@ -38,9 +41,10 @@ func NewServer() (*Server, error) {
 		},
 	})
 
+	todosHandler := todos.NewHandler(validate)
 	server := &Server{
-		handler: *handler,
-		app:     app,
+		app:         app,
+		todoHandler: todosHandler,
 	}
 
 	server.setupRouter()
@@ -66,7 +70,20 @@ func (s *Server) setupRouter() {
 		return c.Next()
 	})
 
-	s.handler.Register(s.app)
+	api := s.app.Group("/api")
+
+	s.app.Get("/", func(c fiber.Ctx) error {
+		return c.Redirect().To("/todos")
+	})
+
+	// Setup Todos Routes
+	s.todoHandler.Mount(s.app, api)
+
+	api.Get("/", func(c fiber.Ctx) error {
+		return c.SendString("Hello from Api")
+	})
+
+	s.app.Use(handlers.NotFoundMiddleware)
 }
 
 func (s *Server) Start(addr string) error {

@@ -4,6 +4,7 @@ go 1.21.6
 
 require (
 	github.com/a-h/templ v0.2.543
+	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-playground/validator/v10 v10.17.0
 	github.com/gofiber/fiber/v3 v3.0.0-20240209112721-2b03f47fae08
 	github.com/google/uuid v1.6.0
@@ -26,4 +27,5 @@ require (
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
+	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )

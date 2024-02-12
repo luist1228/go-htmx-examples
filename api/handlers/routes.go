@@ -1,7 +1,8 @@
-package handler
+package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v3"
@@ -9,21 +10,9 @@ import (
 	"github.com/luist1228/go-htmx-examples/templates/views/layouts"
 )
 
-func (h *Handler) Register(app *fiber.App) {
-	api := app.Group("/api")
-
-	app.Get("/", func(c fiber.Ctx) error {
-		return c.Redirect().To("/todos")
-	})
-
-	h.RegisterTodosRequests(app, api)
-
-	api.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("Hello from Api")
-	})
-
-	app.Use(NotFoundMiddleware)
-}
+const (
+	htmxHeaderKey = "HX-Request"
+)
 
 func NotFoundMiddleware(c fiber.Ctx) error {
 	return Render(c, layouts.Main("Not Found", views.NotFound()), templ.WithStatus(http.StatusNotFound))
@@ -31,4 +20,29 @@ func NotFoundMiddleware(c fiber.Ctx) error {
 
 func FullPageRender(title string, content templ.Component) templ.Component {
 	return layouts.Main(title, layouts.App(content))
+}
+
+func IsHtmx(c fiber.Ctx) bool {
+	return c.Get(htmxHeaderKey) == "true"
+}
+
+func IsApiRequest(c fiber.Ctx) bool {
+	return strings.Contains(c.Path(), "/api")
+}
+
+func CaseResponse(
+	c fiber.Ctx,
+	htmxContent templ.Component,
+	apiData any,
+	fullPage templ.Component,
+) error {
+	if IsApiRequest(c) {
+		return c.JSON(apiData)
+	}
+
+	if IsHtmx(c) {
+		return Render(c, htmxContent)
+	}
+
+	return Render(c, fullPage)
 }
