@@ -9,6 +9,8 @@ templ AddTodo() {
 		hx-swap="beforeend"
 		class="flex-1 flex flex-row min-w-0 mt-2"
 		hx-on::after-request="this.reset()"
+		hx-indicator="#indicator"
+		hx-disabled-elt="this"
 	>
 		<input
 			type="text"
@@ -21,6 +23,7 @@ templ AddTodo() {
 			class="btn btn-primary  "
 		>
 			Add
+			<span id="indicator" class="loading loading-spinner htmx-indicator"></span>
 		</button>
 	</form>
 }

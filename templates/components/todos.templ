@@ -2,10 +2,42 @@ package components
 
 import "github.com/luist1228/go-htmx-examples/db"
 
+script loadSorting() {
+	var sortables = document.querySelectorAll(".sortable");
+	for (var i = 0; i < sortables.length; i++) {
+		var sortable = sortables[i];
+		var sortableInstance = new Sortable(sortable, {
+				draggable: '.draggable',
+				handle:'.handle',
+				animation: 150,
+				chosenClass: 'dragClass',
+				// Make the `.htmx-indicator` unsortable
+				filter: ".htmx-indicator",
+				onMove: function (evt) {
+					return evt.related.className.indexOf('htmx-indicator') === -1;
+				},
+
+				// Disable sorting on the `end` event
+				onEnd: function (evt) {
+					this.option("disabled", true);
+				}
+		});
+
+		// Re-enable sorting on the `htmx:afterSwap` event
+		sortable.addEventListener("htmx:afterSwap", function() {
+			sortableInstance.option("disabled", false);
+		});
+	}
+
+
+	
+}
+
 templ Todos(todos db.Todos) {
-	<div class="space-y-2 my-2" id="todos">
+	<div class="space-y-2 my-2 sortable" id="todos">
 		for _, todo:= range todos.All() {
 			@Todo(*todo)
 		}
+		@loadSorting()
 	</div>
 }

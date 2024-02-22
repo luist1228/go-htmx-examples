@@ -3,7 +3,45 @@ package views
 import "github.com/luist1228/go-htmx-examples/templates/components"
 import "github.com/luist1228/go-htmx-examples/db"
 
+script customSortForm() {
+	htmx.on("end", ()=>{
+		const form = document.getElementById("sort-form")
+		if(form){
+			form.replaceChildren("")
+		}
+		const todos = document.querySelectorAll("input[name='sort-id']")
+		if(todos.length > 0 ){
+			todos.forEach((input)=>{
+				const newInput= document.createElement("input")
+				newInput.setAttribute("type","hidden")
+				newInput.setAttribute("name","id")
+				newInput.setAttribute("value", input.value)
+				form.appendChild(newInput)
+				htmx.process(newInput)
+			})
+			htmx.trigger("#sort-form","custom-end")
+
+			htmx.on("htmx:afterSwap", function(){
+				form.replaceChildren("")
+			})
+		}
+	})
+
+
+}
+
 templ TodosView(todos db.Todos) {
 	@components.AddTodo()
+	<form
+		method="POST"
+		action="/todos/sort"
+		hx-post="/todos/sort"
+		hx-trigger="custom-end"
+		hx-target="#todos"
+		hx-swap="outerHTML"
+		id="sort-form"
+		enctype="multipart/form-data"
+	></form>
 	@components.Todos(todos)
+	@customSortForm()
 }

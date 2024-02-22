@@ -12,6 +12,43 @@ import "bytes"
 
 import "github.com/luist1228/go-htmx-examples/db"
 
+func loadSorting() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_loadSorting_2bb1`,
+		Function: `function __templ_loadSorting_2bb1(){var sortables = document.querySelectorAll(".sortable");
+	for (var i = 0; i < sortables.length; i++) {
+		var sortable = sortables[i];
+		var sortableInstance = new Sortable(sortable, {
+				draggable: '.draggable',
+				handle:'.handle',
+				animation: 150,
+				chosenClass: 'dragClass',
+				// Make the ` + "`" + `.htmx-indicator` + "`" + ` unsortable
+				filter: ".htmx-indicator",
+				onMove: function (evt) {
+					return evt.related.className.indexOf('htmx-indicator') === -1;
+				},
+
+				// Disable sorting on the ` + "`" + `end` + "`" + ` event
+				onEnd: function (evt) {
+					this.option("disabled", true);
+				}
+		});
+
+		// Re-enable sorting on the ` + "`" + `htmx:afterSwap` + "`" + ` event
+		sortable.addEventListener("htmx:afterSwap", function() {
+			sortableInstance.option("disabled", false);
+		});
+	}
+
+
+	
+}`,
+		Call:       templ.SafeScript(`__templ_loadSorting_2bb1`),
+		CallInline: templ.SafeScriptInline(`__templ_loadSorting_2bb1`),
+	}
+}
+
 func Todos(todos db.Todos) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -25,7 +62,7 @@ func Todos(todos db.Todos) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"space-y-2 my-2\" id=\"todos\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"space-y-2 my-2 sortable\" id=\"todos\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -34,6 +71,10 @@ func Todos(todos db.Todos) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+		}
+		templ_7745c5c3_Err = loadSorting().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {

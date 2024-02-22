@@ -13,6 +13,39 @@ import "bytes"
 import "github.com/luist1228/go-htmx-examples/templates/components"
 import "github.com/luist1228/go-htmx-examples/db"
 
+func customSortForm() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_customSortForm_3f75`,
+		Function: `function __templ_customSortForm_3f75(){htmx.on("end", ()=>{
+		const form = document.getElementById("sort-form")
+		if(form){
+			form.replaceChildren("")
+		}
+		const todos = document.querySelectorAll("input[name='sort-id']")
+		if(todos.length > 0 ){
+			todos.forEach((input)=>{
+				const newInput= document.createElement("input")
+				newInput.setAttribute("type","hidden")
+				newInput.setAttribute("name","id")
+				newInput.setAttribute("value", input.value)
+				form.appendChild(newInput)
+				htmx.process(newInput)
+			})
+			htmx.trigger("#sort-form","custom-end")
+
+			htmx.on("htmx:afterSwap", function(){
+				form.replaceChildren("")
+			})
+		}
+	})
+
+
+}`,
+		Call:       templ.SafeScript(`__templ_customSortForm_3f75`),
+		CallInline: templ.SafeScriptInline(`__templ_customSortForm_3f75`),
+	}
+}
+
 func TodosView(todos db.Todos) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -30,7 +63,15 @@ func TodosView(todos db.Todos) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form method=\"POST\" action=\"/todos/sort\" hx-post=\"/todos/sort\" hx-trigger=\"custom-end\" hx-target=\"#todos\" hx-swap=\"outerHTML\" id=\"sort-form\" enctype=\"multipart/form-data\"></form>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		templ_7745c5c3_Err = components.Todos(todos).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = customSortForm().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

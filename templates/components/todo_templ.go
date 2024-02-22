@@ -33,20 +33,20 @@ func Todo(todo db.Todo) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"rounded-btn bg-base-100 p-2 items-center grid grid-cols-12 gap-1 grid-rows-2 sm:grid-rows-1\"><form class=\"col-span-10  sm:col-span-9 row-span-2 sm:row-span-1\" action=\"\"><span class=\"cursor-pointer\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"draggable rounded-btn bg-base-100 p-2 items-center grid grid-cols-12 gap-1 grid-rows-2 sm:grid-rows-1\"><div class=\"col-span-10  sm:col-span-9 row-span-2 sm:row-span-1\"><form id=\"descriptionToggle\" action=\"\"><span class=\"cursor-pointer\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(todo.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/todo.templ`, Line: 11, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/components/todo.templ`, Line: 11, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></form><form class=\"col-span-1 sm:col-start-auto  col-start-11\" action=\"\"><button class=\"btn btn-block btn-accent h-full \">🖊</button></form><form method=\"POST\" action=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></form></div><form class=\"col-span-1 sm:col-start-auto col-start-11\" action=\"\"><button class=\"btn btn-block btn-accent h-full \">🖊</button></form><form method=\"POST\" action=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -63,7 +63,15 @@ func Todo(todo db.Todo) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"col-span-1 sm:col-start-auto col-start-12 \"><button type=\"submit\" class=\"btn btn-error btn-block  h-full \">🗑</button></form><button class=\"btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1\">≡</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"col-span-1 sm:col-start-auto col-start-12 \"><button type=\"submit\" class=\"btn btn-error btn-block  h-full \">🗑</button></form><button class=\"handle btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1\">≡</button> <input type=\"hidden\" name=\"sort-id\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(todo.ID.String()))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

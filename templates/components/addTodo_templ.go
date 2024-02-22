@@ -23,7 +23,7 @@ func AddTodo() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form method=\"POST\" action=\"/todos\" hx-post=\"/todos\" hx-target=\"#todos\" hx-swap=\"beforeend\" class=\"flex-1 flex flex-row min-w-0 mt-2\" hx-on::after-request=\"this.reset()\"><input type=\"text\" placeholder=\"Add new todo \" class=\"input input-bordered min-w-0 flex-1 \" name=\"description\"> <button type=\"submit\" class=\"btn btn-primary  \">Add</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form method=\"POST\" action=\"/todos\" hx-post=\"/todos\" hx-target=\"#todos\" hx-swap=\"beforeend\" class=\"flex-1 flex flex-row min-w-0 mt-2\" hx-on::after-request=\"this.reset()\" hx-indicator=\"#indicator\" hx-disabled-elt=\"this\"><input type=\"text\" placeholder=\"Add new todo \" class=\"input input-bordered min-w-0 flex-1 \" name=\"description\"> <button type=\"submit\" class=\"btn btn-primary  \">Add <span id=\"indicator\" class=\"loading loading-spinner htmx-indicator\"></span></button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

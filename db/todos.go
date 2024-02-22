@@ -3,13 +3,13 @@ package db
 import (
 	"embed"
 	"encoding/json"
-	"fmt"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 )
 
-type Todos []*Todo 
+type Todos []*Todo
 
 func NewTodos() *Todos {
 	return &Todos{}
@@ -17,6 +17,18 @@ func NewTodos() *Todos {
 
 func (l *Todos) Add(description string, completed bool) *Todo {
 	todo := NewTodo(description, completed)
+
+	*l = append(*l, todo)
+	return todo
+}
+
+func (l *Todos) AddWithId(description string, completed bool, id uuid.UUID) *Todo {
+	todo := &Todo{
+		Description: description,
+		ID:          id,
+		Completed:   completed,
+		CreatedAt:   time.Now(),
+	}
 	*l = append(*l, todo)
 	return todo
 }
@@ -66,7 +78,6 @@ func (l *Todos) Get(id uuid.UUID) *Todo {
 }
 
 func (l *Todos) Reorder(ids []uuid.UUID) []*Todo {
-	fmt.Println("ids:", ids)
 	newTodos := make([]*Todo, len(ids))
 	for i, id := range ids {
 		newTodos[i] = (*l)[l.indexOf(id)]
@@ -85,13 +96,8 @@ func (l *Todos) indexOf(id uuid.UUID) int {
 	return -1
 }
 
-type JSONTodo struct {
-	Description string `json:"description"`
-	Completed   bool   `json:"completed"`
-	ID          int    `json:"id"`
-}
 type JSONTodos struct {
-	Todos []*JSONTodo `json:"todos"`
+	Todos []*Todo `json:"todos"`
 }
 
 //go:embed todos.json
@@ -105,7 +111,7 @@ func FillTodos() *Todos {
 
 	todos := NewTodos()
 	for _, todo := range data.Todos {
-		todos.Add(todo.Description, todo.Completed)
+		todos.AddWithId(todo.Description, todo.Completed, todo.ID)
 	}
 
 	return todos

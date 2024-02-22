@@ -11,6 +11,8 @@ templ Main(title string, content templ.Component) {
 			<script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
 			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 			<link rel="stylesheet" href="/assets/css/tailwind.css"/>
+			<script src="/assets/app.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 			<link
 				rel="stylesheet"
 				href="https://cdn.xeiaso.net/static/pkg/iosevka/family.css"
@@ -27,7 +29,7 @@ templ Main(title string, content templ.Component) {
 
 					// Manually fire a "storage" event so this window is alerted. On its own, 
 					// localStorage.setItem() only fires a "storage" event for other tabs.
-					const e = new StorageEvent('storage', {
+					const e = new StorageEvent("storage", {
 						storageArea: window.localStorage,
 						key,
 						oldValue,

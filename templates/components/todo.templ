@@ -5,14 +5,14 @@ import "github.com/luist1228/go-htmx-examples/db"
 templ Todo(todo db.Todo) {
 	<div
 		id={ todo.ID.String() }
-		class="rounded-btn bg-base-100 p-2 items-center grid grid-cols-12 gap-1 grid-rows-2 sm:grid-rows-1"
+		class="draggable rounded-btn bg-base-100 p-2 items-center grid grid-cols-12 gap-1 grid-rows-2 sm:grid-rows-1"
 	>
-		<form class="col-span-10  sm:col-span-9 row-span-2 sm:row-span-1" action="">
-			<span class="cursor-pointer">
-				{ todo.Description }
-			</span>
-		</form>
-		<form class="col-span-1 sm:col-start-auto  col-start-11" action="">
+		<div class="col-span-10  sm:col-span-9 row-span-2 sm:row-span-1">
+			<form id="descriptionToggle" action="">
+				<span class="cursor-pointer">{ todo.Description } </span>
+			</form>
+		</div>
+		<form class="col-span-1 sm:col-start-auto col-start-11" action="">
 			<button
 				class="btn btn-block btn-accent h-full "
 			>
@@ -35,9 +35,10 @@ templ Todo(todo db.Todo) {
 			</button>
 		</form>
 		<button
-			class="btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1"
+			class="handle btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1"
 		>
 			≡
 		</button>
+		<input type="hidden" name="sort-id" value={ todo.ID.String() }/>
 	</div>
 }

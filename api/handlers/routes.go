@@ -32,7 +32,7 @@ func IsApiRequest(c fiber.Ctx) bool {
 
 func CaseResponse(
 	c fiber.Ctx,
-	htmxContent templ.Component,
+	partial templ.Component,
 	apiData any,
 	fullPage templ.Component,
 ) error {
@@ -41,7 +41,7 @@ func CaseResponse(
 	}
 
 	if IsHtmx(c) {
-		return Render(c, htmxContent)
+		return Render(c, partial)
 	}
 
 	return Render(c, fullPage)

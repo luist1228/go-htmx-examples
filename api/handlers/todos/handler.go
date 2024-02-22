@@ -16,7 +16,10 @@ import (
 type (
 	Handler interface {
 		GetTodos(c fiber.Ctx) error
+		AddTodo(c fiber.Ctx) error
 		Mount(app *fiber.App, api fiber.Router)
+		SortTodos(c fiber.Ctx) error
+		DeleteTodo(c fiber.Ctx) error
 	}
 
 	handler struct {
@@ -35,16 +38,18 @@ func NewHandler(validator *validator.Validate) Handler {
 
 func (h *handler) Mount(app *fiber.App, api fiber.Router) {
 	// Views
+	app.Delete("/todos/:id", h.DeleteTodo)
+	app.Post("/todos/sort", h.SortTodos)
 	app.Get("/todos", h.GetTodos)
 	app.Post("/todos", h.AddTodo)
 	// Native Post to delete
 	app.Post("/todos/delete/:id", h.DeleteTodo)
 	// With Htmx delete
-	app.Delete("/todos/:id", h.DeleteTodo)
 
 	// API
 	api.Get("/todos", h.GetTodos)
 	api.Post("/todos", h.AddTodo)
+	api.Post("/todos/sort", h.SortTodos)
 	api.Delete("/todos/:id", h.DeleteTodo)
 }
 
@@ -109,10 +114,8 @@ func (h *handler) DeleteTodo(c fiber.Ctx) error {
 			Message: err.Error(),
 		}
 	}
-	fmt.Println(h.todos.All())
 	todoID, _ := uuid.Parse(params.ID)
 	h.todos.Remove(todoID)
-	fmt.Println(h.todos.All())
 	return handlers.CaseResponse(
 		c,
 		components.Todos(h.todos),
@@ -123,4 +126,42 @@ func (h *handler) DeleteTodo(c fiber.Ctx) error {
 
 func (h *handler) fullPageTodoComponent() templ.Component {
 	return handlers.FullPageRender("TODOS", views.TodosView(h.todos))
+}
+
+type sortTodosRequest struct {
+	Ids []string `form:"id"`
+}
+
+func (h *handler) SortTodos(c fiber.Ctx) error {
+	var body sortTodosRequest = sortTodosRequest{
+		Ids: make([]string, 0),
+	}
+
+	if err := c.Bind().MultipartForm(&body); err != nil {
+		return &fiber.Error{
+			Code:    fiber.StatusBadRequest,
+			Message: err.Error(),
+		}
+	}
+
+	ids := make([]uuid.UUID, 0)
+	for _, id := range body.Ids {
+		parsedId, _ := uuid.Parse(id)
+		ids = append(ids, parsedId)
+	}
+	h.todos.Reorder(ids)
+
+	return handlers.CaseResponse(
+		c,
+		components.Todos(h.todos),
+		h.todos,
+		h.fullPageTodoComponent(),
+	)
+
+}
+
+func (h *handler) printTodos() {
+	for _, todo := range h.todos.All() {
+		fmt.Println(todo)
+	}
 }
