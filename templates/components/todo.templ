@@ -4,19 +4,62 @@ import "github.com/luist1228/go-htmx-examples/db"
 
 templ Todo(todo db.Todo) {
 	<div
-		id={ todo.ID.String() }
+		id={ "id-" + todo.ID.String() }
 		class="draggable rounded-btn bg-base-100 p-2 items-center grid grid-cols-12 gap-1 grid-rows-2 sm:grid-rows-1"
 	>
 		<div class="col-span-10  sm:col-span-9 row-span-2 sm:row-span-1">
-			<form id="descriptionToggle" action="">
-				<span class="cursor-pointer">{ todo.Description } </span>
+			<form
+				action={ templ.URL("/todos/edit/" + todo.ID.String()) }
+				method="POST"
+				hx-target={ "#id-" + todo.ID.String() }
+				hx-swap="outerHTML"
+				class={ "overflow-hidden flex flex-row justify-between items-center", templ.KV("line-through", todo.Completed) }
+			>
+				<input
+					type="hidden"
+					name="completed"
+					if !todo.Completed {
+						value="true"
+					} else {
+						value="false"
+					}
+				/>
+				<input
+					type="hidden"
+					name="description"
+					value={ todo.Description }
+				/>
+				<span
+					class="cursor-pointer"
+					hx-patch={ "/todos/edit/" + todo.ID.String() }
+				>
+					{ todo.Description }
+				</span>
+				<noscript>
+					<input
+						type="submit"
+						class="btn  text-wrap btn-ghost w-32 btn-sm h-full"
+						if todo.Completed {
+							value="Set as Not Completed"
+						} else {
+							value="Set as Completed"
+						}
+					/>
+				</noscript>
 			</form>
 		</div>
-		<form class="col-span-1 sm:col-start-auto col-start-11" action="">
+		<form
+			class="col-span-1 sm:col-start-auto col-start-11"
+			action={ templ.URL("/todos/edit/" + todo.ID.String()) }
+			hx-target="#app-content"
+			hx-swap="innerHTML"
+			hx-get={ "/todos/edit/" + todo.ID.String() }
+			hx-push-url="true"
+		>
 			<button
 				class="btn btn-block btn-accent h-full "
 			>
-				🖊
+				📝
 			</button>
 		</form>
 		<form
@@ -31,13 +74,13 @@ templ Todo(todo db.Todo) {
 				type="submit"
 				class="btn btn-error btn-block  h-full "
 			>
-				🗑
+				❌
 			</button>
 		</form>
 		<button
 			class="handle btn btn-block h-full col-span-2 col-start-11 row-span-1 row-start-2 sm:col-start-12 sm:col-span-1 sm:row-start-1"
 		>
-			≡
+			📌
 		</button>
 		<input type="hidden" name="sort-id" value={ todo.ID.String() }/>
 	</div>

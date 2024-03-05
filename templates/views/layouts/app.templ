@@ -1,10 +1,10 @@
 package layouts
 
-
-
 templ App(content templ.Component) {
-	if content != nil {
-		@content
-	}
-	{ children... }
+	<div id="app-content">
+		if content != nil {
+			@content
+		}
+		{ children... }
+	</div>
 }

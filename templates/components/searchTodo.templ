@@ -11,17 +11,17 @@ templ SearchTodo() {
 		<input
 			hx-get="/todos/search"
 			hx-trigger="keyup changed delay:500ms, search"
-			hx-target="#sort-form"
+			hx-target="#todos"
 			type="text"
 			name="search"
 			class="input input-bordered min-w-0  flex-1 "
 			placeholder="Search Todo"
 		/>
-		// <button
-		// 	type="submit"
-		// 	class="btn btn-secondary  "
-		// >
-		// 	Search
-		// </button>
+		<button
+			type="submit"
+			class="btn btn-secondary  "
+		>
+			Search
+		</button>
 	</form>
 }

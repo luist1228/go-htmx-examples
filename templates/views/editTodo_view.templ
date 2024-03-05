@@ -1,0 +1,51 @@
+package views
+
+import "github.com/luist1228/go-htmx-examples/db"
+
+templ EditTodoView(todo db.Todo) {
+	<form
+		action={ templ.URL("/todos/edit/" + todo.ID.String()) }
+		method="POST"
+		hx-patch={ "/todos/edit/" + todo.ID.String() }
+		hx-swap="innerHTML"
+		hx-target="#app-content"
+		hx-push-url="true"
+		class="bg-base-100 p-4 rounded-btn flex flex-col gap-2 mt-4"
+	>
+		<div class="flex flex-row justify-between items-center">
+			<h1 class="text-xl font-bold ">
+				Edit Todo
+			</h1>
+			<div class="form-control w-32">
+				<label class="label cursor-pointer">
+					<span class="label-text">Completed</span>
+					<input
+						name="completed"
+						type="checkbox"
+						class="toggle toggle-success"
+						checked?={ todo.Completed }
+					/>
+				</label>
+			</div>
+		</div>
+		<label class="form-control">
+			<div class="label">
+				Description
+			</div>
+			<textarea
+				name="description"
+				class="textarea textarea-bordered textarea-md w-full"
+			>
+				{ todo.Description }
+			</textarea>
+		</label>
+		<button
+			class="btn btn-primary"
+			type="submit"
+			hx-disabled-elt="this"
+		>
+			Save Changes
+			<span class="htmx-indicator loading loading-spinner"></span>
+		</button>
+	</form>
+}

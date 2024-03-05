@@ -14,15 +14,15 @@ import "github.com/luist1228/go-htmx-examples/util"
 
 func ThemeChange() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ThemeChange_24c4`,
-		Function: `function __templ_ThemeChange_24c4(){// Check initial theme and set check svg visible
+		Name: `__templ_ThemeChange_5436`,
+		Function: `function __templ_ThemeChange_5436(){// Check initial theme and set check svg visible
 	const currentTheme=window.localStorage.getItem("theme")
 	if(currentTheme){
 		const currentCheckSVG= document.getElementById("svg-"+currentTheme)
 		currentCheckSVG.classList.remove('invisible')
 		currentCheckSVG.classList.add('visible')
 	}
-	// When theme changes highlight wich theme is selected
+	// When theme changes highlight which theme is selected
 	window.addEventListener("storage", (e)=>{
 		if(e.key==="theme"){
 			// Get old and new values
@@ -40,8 +40,8 @@ func ThemeChange() templ.ComponentScript {
 		}
 	}, false)
 }`,
-		Call:       templ.SafeScript(`__templ_ThemeChange_24c4`),
-		CallInline: templ.SafeScriptInline(`__templ_ThemeChange_24c4`),
+		Call:       templ.SafeScript(`__templ_ThemeChange_5436`),
+		CallInline: templ.SafeScriptInline(`__templ_ThemeChange_5436`),
 	}
 }
 

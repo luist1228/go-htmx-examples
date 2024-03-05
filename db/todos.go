@@ -3,6 +3,7 @@ package db
 import (
 	"embed"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -15,22 +16,13 @@ func NewTodos() *Todos {
 	return &Todos{}
 }
 
-func (l *Todos) Add(description string, completed bool) *Todo {
-	todo := NewTodo(description, completed)
+var List = FillTodos()
 
+func (l *Todos) Add(description string) *Todo {
+	todo := NewTodo(description, false)
 	*l = append(*l, todo)
 	return todo
-}
 
-func (l *Todos) AddWithId(description string, completed bool, id uuid.UUID) *Todo {
-	todo := &Todo{
-		Description: description,
-		ID:          id,
-		Completed:   completed,
-		CreatedAt:   time.Now(),
-	}
-	*l = append(*l, todo)
-	return todo
 }
 
 func (l *Todos) Remove(id uuid.UUID) {
@@ -86,7 +78,6 @@ func (l *Todos) Reorder(ids []uuid.UUID) []*Todo {
 	return newTodos
 }
 
-// indexOf returns the index of the todo with the given id or -1 if not found
 func (l *Todos) indexOf(id uuid.UUID) int {
 	for i, todo := range *l {
 		if todo.ID == id {
@@ -115,4 +106,21 @@ func FillTodos() *Todos {
 	}
 
 	return todos
+}
+
+func (t *Todos) PrintTodos() {
+	for _, todo := range t.All() {
+		fmt.Println(todo)
+	}
+}
+
+func (l *Todos) AddWithId(description string, completed bool, id uuid.UUID) *Todo {
+	todo := &Todo{
+		Description: description,
+		ID:          id,
+		Completed:   completed,
+		CreatedAt:   time.Now(),
+	}
+	*l = append(*l, todo)
+	return todo
 }

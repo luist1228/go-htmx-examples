@@ -35,7 +35,7 @@ script loadSorting() {
 
 templ Todos(todos db.Todos) {
 	<div class="space-y-2 my-2 sortable" id="todos">
-		for _, todo:= range todos.All() {
+		for _, todo:= range todos {
 			@Todo(*todo)
 		}
 		@loadSorting()

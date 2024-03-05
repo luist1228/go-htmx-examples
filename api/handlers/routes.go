@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -8,11 +9,9 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/luist1228/go-htmx-examples/templates/views"
 	"github.com/luist1228/go-htmx-examples/templates/views/layouts"
+	"github.com/luist1228/go-htmx-examples/util"
 )
 
-const (
-	htmxHeaderKey = "HX-Request"
-)
 
 func NotFoundMiddleware(c fiber.Ctx) error {
 	return Render(c, layouts.Main("Not Found", views.NotFound()), templ.WithStatus(http.StatusNotFound))
@@ -23,7 +22,7 @@ func FullPageRender(title string, content templ.Component) templ.Component {
 }
 
 func IsHtmx(c fiber.Ctx) bool {
-	return c.Get(htmxHeaderKey) == "true"
+	return c.Get(util.HtmxHeaderKey) == "true"
 }
 
 func IsApiRequest(c fiber.Ctx) bool {
@@ -45,4 +44,22 @@ func CaseResponse(
 	}
 
 	return Render(c, fullPage)
+}
+
+func SetHtmxLocationHeader(c fiber.Ctx, path string, target string) error {
+	location := struct {
+		Path   string `json:"path"`
+		Target string `json:"target"`
+	}{
+		Path:   path,
+		Target: target,
+	}
+
+	l, err := json.Marshal(location)
+
+	if err != nil {
+		return err
+	}
+	c.Response().Header.Add(util.HtmxLocationKey, string(l))
+	return nil
 }

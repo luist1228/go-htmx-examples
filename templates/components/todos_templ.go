@@ -66,7 +66,7 @@ func Todos(todos db.Todos) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, todo := range todos.All() {
+		for _, todo := range todos {
 			templ_7745c5c3_Err = Todo(*todo).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

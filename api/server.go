@@ -10,10 +10,7 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/luist1228/go-htmx-examples/api/handlers"
 	"github.com/luist1228/go-htmx-examples/api/handlers/todos"
-)
-
-const (
-	htmxHeaderKey = "HX-Request"
+	"github.com/luist1228/go-htmx-examples/util"
 )
 
 type Server struct {
@@ -65,7 +62,7 @@ func (s *Server) setupRouter() {
 
 	// Check if request has HTMX headers and add it to the context
 	s.app.Use(func(c fiber.Ctx) error {
-		htmxHeader := c.Get(htmxHeaderKey)
+		htmxHeader := c.Get(util.HtmxHeaderKey)
 		c.Context().SetUserValue("isHtmx", htmxHeader == "true")
 		return c.Next()
 	})
